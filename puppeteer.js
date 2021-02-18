@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const useProxy = require('puppeteer-page-proxy');
 
 (async () => {
-    const browser = await puppeteer.launch({headless: true});
+    const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox']});
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(0);
     await useProxy(page, 'http://admin:QRCqiLsDeY@165.227.80.239:8167');
