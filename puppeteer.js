@@ -8,7 +8,7 @@ const useProxy = require('puppeteer-page-proxy');
         const page = await browser.newPage();
         console.log("Opened new page");
         page.setDefaultNavigationTimeout(0);
-        await useProxy(page, 'http://admin:QRCqiLsDeY@165.227.80.239:8167');
+        // await useProxy(page, 'http://admin:QRCqiLsDeY@165.227.80.239:8167');
         console.log("Connected to proxy.");
         await page.goto('https://testmy.net');
         console.log("Opened testmy.net");
