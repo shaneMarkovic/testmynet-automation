@@ -3,7 +3,7 @@ const useProxy = require('puppeteer-page-proxy');
 
 (async () => {
     try {
-        const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+        const browser = await puppeteer.launch({ headless: true });
         console.log("Launched.")
         const page = await browser.newPage();
         console.log("Opened new page");
