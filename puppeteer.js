@@ -3,12 +3,17 @@ const useProxy = require('puppeteer-page-proxy');
 
 (async () => {
     const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox']});
+    console.log("Launched.")
     const page = await browser.newPage();
+    console.log("Opened new page");
     page.setDefaultNavigationTimeout(0);
     await useProxy(page, 'http://admin:QRCqiLsDeY@165.227.80.239:8167');
+    console.log("Connected to proxy.");
     await page.goto('https://testmy.net');
+    console.log("Opened testmy.net");
     await page.$eval('#testBtnMn', el => el.click());
     await page.click('a[title="Upload & Download Speed Test"]');
+    console.log("Speedtest started");
     await page.waitForNavigation({timeout: 0, waitUntil: "networkidle0"});
     console.log("Collecting data");
     await page.screenshot({ path: 'example.png' });
