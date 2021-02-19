@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const useProxy = require('puppeteer-page-proxy');
 
-async function testSpeed(username, password, ip, port) {
+async function testSpeed(username, password, ip, port, mirror) {
     const browser = await puppeteer.launch({ headless: true, args: [`--proxy-server=http://${ip}:${port}`] });
     let dwSpeed = 0;
     let upSpeed = 0;
@@ -13,7 +13,7 @@ async function testSpeed(username, password, ip, port) {
             password,
         });
         console.log("Authenticated");
-        await page.goto('https://testmy.net');
+        await page.goto(`https://${mirror}.testmy.net`);
         await page.$eval('#testBtnMn', el => el.click());
         await page.click('a[title="Upload & Download Speed Test"]');
         console.log("Testing started")
