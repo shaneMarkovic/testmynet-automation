@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
 const testSpeed = require('./puppeteer');
+const automatic = require('./automatic');
 const port = 3000
 
 app.use(bodyParser());
@@ -15,7 +16,7 @@ app.post('/', async (req, res) => {
     }
 
     try {
-        const results = await testSpeed(body.username, body.password, body.ip, body.port);
+        const results = await automatic(body.username, body.password, body.ip, body.port);
         res.send(results);
     } catch (e) {
         res.status(400);
