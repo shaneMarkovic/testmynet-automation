@@ -2,15 +2,15 @@ const puppeteer = require('puppeteer');
 const useProxy = require('puppeteer-page-proxy');
 
 async function testSpeed(username, password, ip, port) {
-    const browser = await puppeteer.launch({ headless: true, args: ['--proxy-server=http://157.230.184.117:8225'] });
+    const browser = await puppeteer.launch({ headless: true, args: [`--proxy-server=http://${ip}:${port}`] });
     let dwSpeed = 0;
     let upSpeed = 0;
     console.log("Launched.")
     try {
         const page = await browser.newPage();
         await page.authenticate({
-            username: "admin",
-            password: "mhZdFu7H2R",
+            username,
+            password,
         });
         console.log("Authenticated");
         await page.goto('https://testmy.net');
@@ -38,8 +38,9 @@ async function testSpeed(username, password, ip, port) {
         upSpeed = upSpeedArray[0];
         console.log(`Download speed: ${dwSpeed}`);
         console.log(`Upload speed: ${upSpeed}`);
+        browser.close();
     } catch (e) {
-        // browser.close();
+        browser.close();
         console.log(e);
         throw new Error(`Check logs for errors, Download: ${dwSpeed}Mbps Upload: ${upSpeed}Mbps`);
     }
