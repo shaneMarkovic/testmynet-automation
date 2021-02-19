@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const useProxy = require('puppeteer-page-proxy');
 
 async function testSpeed(username, password, ip, port) {
-    const browser = await puppeteer.launch({ headless: false, args: [ '--proxy-server=http://157.230.184.117:8225' ] });
+    const browser = await puppeteer.launch({ headless: true, args: [ '--proxy-server=http://157.230.184.117:8225' ] });
     let dwSpeed = 0;
     let upSpeed = 0;
     console.log("Launched.")
