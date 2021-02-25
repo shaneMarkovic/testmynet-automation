@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer');
 const useProxy = require('puppeteer-page-proxy');
+const axios = require('axios');
 
-async function testSpeed(username, password, ip, port, mirror) {
+async function testSpeed(id, username, password, ip, port, mirror) {
     const browser = await puppeteer.launch({ headless: true, args: [`--proxy-server=http://${ip}:${port}`] });
     let dwSpeed = 0;
     let upSpeed = 0;
@@ -39,12 +40,17 @@ async function testSpeed(username, password, ip, port, mirror) {
         console.log(`Download speed: ${dwSpeed}`);
         console.log(`Upload speed: ${upSpeed}`);
         browser.close();
+        await sendTestResults(id, dwSpeed, upSpeed);
     } catch (e) {
+        await sendTestResults(id, dwSpeed, upSpeed);
         browser.close();
         console.log(e);
         throw new Error(`Check logs for errors, Download: ${dwSpeed}Mbps Upload: ${upSpeed}Mbps`);
     }
-    return { dwSpeed, upSpeed };
+}
+
+async function sendTestResults(id, dwSpeed, upSpeed) {
+    await axios.default.post(`https://api.mountproxies.com/api/speed_test_log/${id}/update`, { dwSpeed, upSpeed })
 }
 
 module.exports = testSpeed;
