@@ -3,7 +3,23 @@ const useProxy = require('puppeteer-page-proxy');
 const axios = require('axios');
 
 async function testSpeed(id, username, password, ip, port, mirror) {
-    const browser = await puppeteer.launch({ headless: true, args: [`--proxy-server=http://${ip}:${port}`] });
+    const browser = await puppeteer.launch({ headless: true, args: [`--proxy-server=http://${ip}:${port}`,
+    '--disable-canvas-aa', // Disable antialiasing on 2d canvas
+    '--disable-2d-canvas-clip-aa', // Disable antialiasing on 2d canvas clips
+    '--disable-gl-drawing-for-tests', // BEST OPTION EVER! Disables GL drawing operations which produce pixel output. With this the GL output will not be correct but tests will run faster.
+    '--disable-dev-shm-usage', // ???
+    '--no-zygote', // wtf does that mean ?
+    '--use-gl=swiftshader', // better cpu usage with --use-gl=desktop rather than --use-gl=swiftshader, still needs more testing.
+    '--enable-webgl',
+    '--hide-scrollbars',
+    '--mute-audio',
+    '--no-first-run',
+    '--disable-infobars',
+    '--disable-breakpad',
+    //'--ignore-gpu-blacklist',
+    '--window-size=1280,1024', // see defaultViewport
+    '--no-sandbox', // meh but better resource comsuption
+    '--disable-setuid-sandbox'] });
     let dwSpeed = 0;
     let upSpeed = 0;
     console.log("Launched.")
@@ -20,7 +36,6 @@ async function testSpeed(id, username, password, ip, port, mirror) {
         console.log("Testing started")
         await page.waitForNavigation({ timeout: 0, waitUntil: "networkidle0" });
         console.log("Collecting data");
-        await page.screenshot({ path: 'example.png' });
         const dwSiblings = await page.$$('.im-dnarw');
         const dwSibling = dwSiblings[0];
         const dwParent = (await dwSibling.$x('..'))[0]; // Element Parent
@@ -45,12 +60,13 @@ async function testSpeed(id, username, password, ip, port, mirror) {
         await sendTestResults(id, dwSpeed, upSpeed);
         browser.close();
         console.log(e);
-        throw new Error(`Check logs for errors, Download: ${dwSpeed}Mbps Upload: ${upSpeed}Mbps`);
+        console.log(`Check logs for errors, Download: ${dwSpeed}Mbps Upload: ${upSpeed}Mbps`);
     }
 }
 
 async function sendTestResults(id, dwSpeed, upSpeed) {
-    await axios.default.post(`https://api.mountproxies.com/api/speed_test_log/${id}/update`, { dwSpeed, upSpeed })
+    const postResults = await axios.default.post(`https://api.mountproxies.com/api/speed_test_log/${id}/update`, { dwSpeed, upSpeed })
+    console.log(postResults.data);
 }
 
 module.exports = testSpeed;
