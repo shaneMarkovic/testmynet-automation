@@ -4,7 +4,7 @@ const app = express()
 const bodyParser = require('body-parser');
 const testSpeed = require('./puppeteer');
 const automatic = require('./automatic');
-const port = 3001
+const port = 3000
 
 app.use(bodyParser());
 
