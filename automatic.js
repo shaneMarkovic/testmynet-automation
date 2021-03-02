@@ -4,7 +4,16 @@ const axios = require('axios');
 
 async function testSpeed(id, username, password, ip, port, mirror) {
     const browser = await puppeteer.launch({ headless: true, args: [`--proxy-server=http://${ip}:${port}`,
+    '--no-zygote', // wtf does that mean ?
+    '--use-gl=swiftshader', // better cpu usage with --use-gl=desktop rather than --use-gl=swiftshader, still needs more testing.
+    '--enable-webgl',
+    '--hide-scrollbars',
+    '--mute-audio',
     '--no-first-run',
+    '--disable-infobars',
+    '--disable-breakpad',
+    //'--ignore-gpu-blacklist',
+    '--window-size=1280,1024', // see defaultViewport
     '--no-sandbox', // meh but better resource comsuption
     '--disable-setuid-sandbox'] });
     let dwSpeed = 0;
@@ -22,7 +31,7 @@ async function testSpeed(id, username, password, ip, port, mirror) {
         await page.$eval('#testBtnMn', el => el.click());
         await page.click('a[title="Upload & Download Speed Test"]');
         console.log("Testing started")
-        await page.waitForSelector('.im-dnarw', {timeout: 0});
+        await page.waitForSelector('.im-dnarw', {timeout: 180000});
         // await page.waitForNavigation({ timeout: 0, waitUntil: "networkidle0" });
         console.log("Collecting data");
         const dwSiblings = await page.$$('.im-dnarw');
