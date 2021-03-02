@@ -56,7 +56,7 @@ async function testSpeed(id, username, password, ip, port, mirror) {
         await sendTestResults(id, dwSpeed, upSpeed);
     } catch (e) {
         await sendTestResults(id, dwSpeed, upSpeed);
-        // browser.close();
+        browser.close();
         console.log(e);
         console.log(`Check logs for errors, Download: ${dwSpeed}Mbps Upload: ${upSpeed}Mbps`);
     }
