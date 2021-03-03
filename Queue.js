@@ -13,6 +13,8 @@ class Test {
         this.dwSpeed = 0;
         this.upSpeed = 0;
         this.numberOfTests = 0;
+        this.dwUnit = "";
+        this.upUnit = "";
     }
 
     testSpeed = async () => {
@@ -52,6 +54,7 @@ class Test {
             const dwSpeedFull = dwParentHtml.replace(`JSHandle:<span class="icoImg im-dnarw" aria-hidden="true"></span> `, "");
             const dwSpeedArray = dwSpeedFull.split(" ");
             this.dwSpeed = dwSpeedArray[0];
+            this.dwUnit = dwSpeedArray[1];
             const upSiblings = await page.$$('.im-uparw');
             const upSibling = upSiblings[0];
             const upParent = (await upSibling.$x('..'))[0]; // Element Parent
@@ -60,6 +63,7 @@ class Test {
             const upSpeedFull = upParentHtml.replace(`JSHandle:<span class="icoImg im-uparw" aria-hidden="true"></span> `, "");
             const upSpeedArray = upSpeedFull.split(" ");
             this.upSpeed = upSpeedArray[0];
+            this.upUnit = upSpeedArray[1];
             console.log(`Download speed: ${this.dwSpeed}`);
             console.log(`Upload speed: ${this.upSpeed}`);
             browser.close();
@@ -71,7 +75,7 @@ class Test {
                 await this.testSpeed();
             } else {
                 browser.close();
-                await sendTestResults(this.id, this.dwSpeed, this.upSpeed);
+                await sendTestResults(this.id, this.dwSpeed, this.upSpeed, this.dwUnit, this.upUnit);
                 console.log(e);
                 console.log(`Check logs for errors, Download: ${this.dwSpeed}Mbps Upload: ${this.upSpeed}Mbps`);
             }
