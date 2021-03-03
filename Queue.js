@@ -20,7 +20,12 @@ class Test {
             ignoreHTTPSErrors: true,
             headless: true, args: [`--proxy-server=http://${this.ip}:${this.port}`,
                 '--no-sandbox', // meh but better resource comsuption
-                '--disable-setuid-sandbox']
+                '--disable-setuid-sandbox',
+                '--enable-logging=stderr',
+                '--v=1',
+                '--disable-dev-shm-usage',
+                '--disable-gpu'
+            ]
         });
         console.log("Launched.")
         try {
