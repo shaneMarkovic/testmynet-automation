@@ -3,10 +3,11 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
 const testSpeed = require('./puppeteer');
-const automatic = require('./automatic');
+const Queue = require('./Queue');
 const port = 3000
 
 app.use(bodyParser());
+const queue = new Queue();
 
 app.post('/', async (req, res) => {
     const body = req.body;
@@ -15,7 +16,8 @@ app.post('/', async (req, res) => {
         res.send("Please provide id, mirror, username, password, ip, and port");
     }
 
-    automatic(body.id, body.username, body.password, body.ip, body.port, body.mirror);
+    queue.addTest(body.id, body.username, body.password, body.ip, body.port, body.mirror);
+    
     res.send({done: true});
 })
 
