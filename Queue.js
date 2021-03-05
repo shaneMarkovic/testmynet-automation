@@ -64,6 +64,7 @@ class Test {
             const upSpeedArray = upSpeedFull.split(" ");
             this.upSpeed = upSpeedArray[0];
             this.upUnit = upSpeedArray[1];
+            console.log(`${this.ip}:${this.port}`);
             console.log(`Download speed: ${this.dwSpeed}`);
             console.log(`Upload speed: ${this.upSpeed}`);
             browser.close();
