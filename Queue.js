@@ -92,7 +92,7 @@ class Queue {
         const nextTest = this.tests[0];
         const test = new Test(nextTest.id, nextTest.username, nextTest.password, nextTest.ip, nextTest.port, nextTest.mirror);
         await test.testSpeed();
-        this.tests.pop();
+        this.tests.shift();
         if(this.tests.length) {
             this.runTests();
         }
